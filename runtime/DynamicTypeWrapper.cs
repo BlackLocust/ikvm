@@ -3551,7 +3551,7 @@ namespace IKVM.Internal
 			private List<TypeBuilder> nestedTypeBuilders;
 			private MethodInfo callerIDMethod;
 			private List<Item> items;
-			private Dictionary<FieldWrapper, ConstructorBuilder> arfuMap;
+            private Dictionary<FieldWrapper, MethodBuilder> arfuMap;
 
 			private struct Item
 			{
@@ -3962,8 +3962,8 @@ namespace IKVM.Internal
 					// - we don't want the synthesized constructor to show up in Java
 					if (!hasConstructor)
 					{
-						ConstructorBuilder cb = typeBuilder.DefineConstructor(MethodAttributes.PrivateScope, CallingConventions.Standard, Type.EmptyTypes);
-						CodeEmitter ilgen = CodeEmitter.Create(cb);
+						//ConstructorBuilder cb = typeBuilder.DefineConstructor(MethodAttributes.PrivateScope, CallingConventions.Standard, Type.EmptyTypes);
+                        CodeEmitter ilgen = CodeEmitter.Create(ReflectUtil.DefineConstructor(typeBuilder, MethodAttributes.PrivateScope, Type.EmptyTypes));
 						ilgen.Emit(OpCodes.Ldnull);
 						ilgen.Emit(OpCodes.Throw);
 						ilgen.DoEmit();
@@ -5331,9 +5331,9 @@ namespace IKVM.Internal
 			internal static TypeBuilder EmitCreateCallerID(TypeBuilder typeBuilder, CodeEmitter ilGenerator)
 			{
 				TypeWrapper tw = CoreClasses.ikvm.@internal.CallerID.Wrapper;
-				TypeBuilder typeCallerID = typeBuilder.DefineNestedType("__<CallerID>", TypeAttributes.Sealed | TypeAttributes.NestedPrivate, tw.TypeAsBaseType);
-				ConstructorBuilder cb = typeCallerID.DefineConstructor(MethodAttributes.Assembly, CallingConventions.Standard, null);
-				CodeEmitter ctorIlgen = CodeEmitter.Create(cb);
+                TypeBuilder typeCallerID = typeBuilder.DefineNestedType("__<CallerID>", TypeAttributes.Sealed | TypeAttributes.NestedPrivate, tw.TypeAsBaseType);
+                MethodBuilder cb = ReflectUtil.DefineConstructor(typeCallerID, MethodAttributes.Assembly, null);
+                CodeEmitter ctorIlgen = CodeEmitter.Create(cb);
 				ctorIlgen.Emit(OpCodes.Ldarg_0);
 				MethodWrapper mw = tw.GetMethodWrapper("<init>", "()V", false);
 				mw.Link();
@@ -5417,7 +5417,7 @@ namespace IKVM.Internal
 				ilgen.Emit(OpCodes.Ldarg_1);
 				ilgen.Emit(OpCodes.Stsfld, fb);
 				ilgen.Emit(OpCodes.Ret);
-				ConstructorBuilder cb = tb.DefineConstructor(MethodAttributes.Assembly, CallingConventions.Standard, Type.EmptyTypes);
+                MethodBuilder cb = ReflectUtil.DefineConstructor(tb, MethodAttributes.Assembly, Type.EmptyTypes);
 				CodeEmitter ctorilgen = CodeEmitter.Create(cb);
 				ctorilgen.Emit(OpCodes.Ldarg_0);
 				MethodWrapper basector = threadLocal.GetMethodWrapper("<init>", "()V", false);
@@ -5433,15 +5433,15 @@ namespace IKVM.Internal
 			{
 				if (arfuMap == null)
 				{
-					arfuMap = new Dictionary<FieldWrapper, ConstructorBuilder>();
+					arfuMap = new Dictionary<FieldWrapper, MethodBuilder>();
 				}
-				ConstructorBuilder cb;
+				MethodBuilder cb;
 				if (!arfuMap.TryGetValue(field, out cb))
 				{
 					TypeWrapper arfuTypeWrapper = ClassLoaderWrapper.LoadClassCritical("ikvm.internal.IntrinsicAtomicReferenceFieldUpdater");
 					TypeBuilder tb = typeBuilder.DefineNestedType("__<ARFU>_" + arfuMap.Count, TypeAttributes.NestedPrivate | TypeAttributes.Sealed, arfuTypeWrapper.TypeAsBaseType);
 					AtomicReferenceFieldUpdaterEmitter.EmitImpl(tb, field.GetField());
-					cb = tb.DefineConstructor(MethodAttributes.Assembly, CallingConventions.Standard, Type.EmptyTypes);
+                    cb = ReflectUtil.DefineConstructor(tb, MethodAttributes.Assembly, Type.EmptyTypes);
 					arfuMap.Add(field, cb);
 					CodeEmitter ctorilgen = CodeEmitter.Create(cb);
 					ctorilgen.Emit(OpCodes.Ldarg_0);
