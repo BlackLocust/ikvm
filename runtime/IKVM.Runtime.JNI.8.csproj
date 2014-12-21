@@ -53,11 +53,11 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IKVM.OpenJDK.Core, Version=0.39.3280.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.Runtime, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.Runtime">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\IKVM.Runtime.dll</HintPath>
     </Reference>

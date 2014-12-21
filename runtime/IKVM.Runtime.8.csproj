@@ -53,23 +53,23 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IKVM.OpenJDK.Core, Version=0.39.3280.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Management, Version=7.0.4259.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Management">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Management.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Misc, Version=0.39.3280.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Misc">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Misc.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Util, Version=0.39.3280.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Util">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Util.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.Runtime.JNI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.Runtime.JNI">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\IKVM.Runtime.JNI.dll</HintPath>
     </Reference>

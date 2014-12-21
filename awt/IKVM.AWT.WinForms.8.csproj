@@ -66,23 +66,23 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IKVM.OpenJDK.Core, Version=0.39.3280.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Media, Version=0.41.3440.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Media">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Media.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Misc, Version=0.39.3280.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Misc">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Misc.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.SwingAWT, Version=0.39.3280.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.SwingAWT">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.SwingAWT.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Text, Version=0.39.3280.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IKVM.OpenJDK.Text">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\IKVM.OpenJDK.Text.dll</HintPath>
     </Reference>
