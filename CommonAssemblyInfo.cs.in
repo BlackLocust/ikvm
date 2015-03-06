@@ -24,7 +24,7 @@
 using System.Reflection;
 
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Jeroen Frijters")]
+[assembly: AssemblyCompany("Jeroen Frijters, with minor modifications by EmbTrak, Inc.")]
 [assembly: AssemblyProduct("IKVM.NET")]
 [assembly: AssemblyCopyright("Copyright (C) 2002-2014 Jeroen Frijters")]
 [assembly: AssemblyTrademark("")]

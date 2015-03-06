@@ -47,15 +47,15 @@ namespace ikvm.awt
     /// <summary>
     /// This class has some static convertion methods from Java to C# objects
     /// </summary>
-    class J2C
+    public class J2C
     {
 
-        internal static Color ConvertColor(java.awt.Color color)
+        public static Color ConvertColor(java.awt.Color color)
         {
             return color == null ? Color.Empty : Color.FromArgb(color.getRGB());
         }
 
-        internal static Bitmap ConvertImage(java.awt.Image img)
+        public static Bitmap ConvertImage(java.awt.Image img)
         {
             if (img is BufferedImage)
             {
@@ -141,7 +141,7 @@ namespace ikvm.awt
             return gp;
         }
 
-        internal static GraphicsPath ConvertShape(java.awt.Shape shape)
+        public static GraphicsPath ConvertShape(java.awt.Shape shape)
         {
             java.awt.geom.PathIterator iterator = shape.getPathIterator(null);
             GraphicsPath gp = new GraphicsPath();
@@ -183,7 +183,11 @@ namespace ikvm.awt
             return gp;
         }
 
-        internal static LineJoin ConvertLineJoin(int join)
+        internal static Brush CreateBrush(java.awt.Color color)
+        {
+            return new SolidBrush(Color.FromArgb(color.getRGB()));
+        }
+        public static LineJoin ConvertLineJoin(int join)
         {
             switch (join)
             {
@@ -199,7 +203,49 @@ namespace ikvm.awt
             }
         }
 
-        internal static Matrix ConvertTransform(java.awt.geom.AffineTransform tx)
+        public static LineCap ConvertLineCap(int cap)
+        {
+            switch (cap)
+            {
+                case java.awt.BasicStroke.CAP_BUTT:
+                    return LineCap.Flat;
+                case java.awt.BasicStroke.CAP_ROUND:
+                    return LineCap.Round;
+                case java.awt.BasicStroke.CAP_SQUARE:
+                    return LineCap.Square;
+                default:
+                    throw new ArgumentException("Invalid LineCap argument.");
+            }
+        }
+
+        internal static float[] ConvertDashArray(float[] dashArray, float lineWidth)
+        {
+            if (dashArray == null || dashArray.Length == 0)
+            {
+                return null;
+            }
+			if (dashArray.Length % 2 == 1)
+			{
+				int len = dashArray.Length;
+				Array.Resize(ref dashArray, len * 2);
+				Array.Copy(dashArray, 0, dashArray, len, len);
+			}
+            float[] dash = (float[])dashArray.Clone();
+            for (int i = 0; i < dash.Length; i++)
+            {
+                //dividing by line thickness because of the representation difference
+                dash[i] = dash[i] / lineWidth;
+            }
+            // To fix the problem where solid style in Java can be represented at { 1.0, 0.0 }.
+            // In .NET, however, array can only have positive value
+            if (dash.Length==2 && dash[dash.Length-1]==0)
+            {
+                Array.Resize(ref dash, 1);
+            }
+            return dash;
+        }
+
+        public static Matrix ConvertTransform(java.awt.geom.AffineTransform tx)
         {
             return new Matrix(
                 (float)tx.getScaleX(),
@@ -252,7 +298,7 @@ namespace ikvm.awt
 			return fs;
 		}
 
-        internal static Font ConvertFont(String name, int style, float size)
+        public static Font ConvertFont(String name, int style, float size)
 		{
             if (size <= 0)
             {
@@ -280,7 +326,7 @@ namespace ikvm.awt
         }
 
 
-		internal static Region ConvertRegion(sun.java2d.pipe.Region shape)
+		public static Region ConvertRegion(sun.java2d.pipe.Region shape)
 		{
             if (shape == null)
             {
