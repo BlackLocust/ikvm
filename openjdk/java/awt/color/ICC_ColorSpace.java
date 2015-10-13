@@ -39,6 +39,7 @@ exception statement from your version. */
 package java.awt.color;
 
 import gnu.java.awt.color.CieXyzConverter;
+import gnu.java.awt.color.CieLabConverter;
 import gnu.java.awt.color.ClutProfileConverter;
 import gnu.java.awt.color.ColorSpaceConverter;
 import gnu.java.awt.color.GrayProfileConverter;
@@ -83,6 +84,12 @@ public class ICC_ColorSpace extends ColorSpace
    * Compatible with JDK 1.2+.
    */
   private static final long serialVersionUID = 3455889114070431483L;
+  
+	//enumeration documented at http://developer.classpath.org/doc/java/awt/color/ColorSpace-source.html
+	//as well as http://hg.openjdk.java.net/jdk7/jdk7/jdk/file/9b8c96f96a0f/src/share/classes/java/awt/color/ColorSpace.java
+	//public static final int TYPE_Lab = 1; 
+	//somehow this is missing in ... wherever the others are defined. openJDK, I think.
+	//If that definition causes errors in the future due to an upgrade of openJDK or something, commenting this line out should be a sensible resolution.
 
   /**
    * @serial
@@ -155,7 +162,14 @@ public class ICC_ColorSpace extends ColorSpace
    */
   public float[] toRGB(float[] colorvalue)
   {
-    return converter.toRGB(colorvalue);
+	try{
+		return converter.toRGB(colorvalue);
+	}catch (ArrayIndexOutOfBoundsException ex){
+		//reporting details of "converter" logic to determine the subclass that should have been used.
+		String sDetail = String.format("colorSpaceType: %s\nprofile %s\nException: %s \n ", thisProfile.getColorSpaceType(), thisProfile.toString(), ex.toString());
+		throw new IllegalArgumentException(sDetail, ex);
+		//cross-reference  output from here to http://developer.classpath.org/doc/java/awt/color/ColorSpace-source.html
+	}	
   }
 
   /**
@@ -245,11 +259,28 @@ public class ICC_ColorSpace extends ColorSpace
   private ColorSpaceConverter getConverter(ICC_Profile profile)
   {
     ColorSpaceConverter converter;
+	
+	
     switch (profile.getColorSpaceType())
       {
       case TYPE_XYZ:
+	  case CS_CIEXYZ:
         converter = new CieXyzConverter();
         break;
+	  case TYPE_Lab:
+		converter = new CieLabConverter();
+		break;
+	  case CS_sRGB:
+		converter = new SrgbConverter();
+		break;
+	  case CS_GRAY:
+	  case TYPE_GRAY:
+	    converter = new GrayScaleConverter();
+		break;
+	  case TYPE_CMYK:
+	  case TYPE_HLS:
+	  case TYPE_HSV:
+	  case TYPE_RGB:
       default:
         if (profile instanceof ICC_ProfileRGB)
           converter = new RgbProfileConverter((ICC_ProfileRGB) profile);
